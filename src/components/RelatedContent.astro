@@ -1,0 +1,134 @@
+---
+import type { BaseArticleFrontmatter } from '../content/schemas';
+
+interface RelatedArticleItem {
+  id: string;
+  data: BaseArticleFrontmatter;
+  collection: 'blog' | 'guides';
+}
+
+interface Props {
+  articles: RelatedArticleItem[];
+  currentSlug: string;
+  title?: string;
+}
+
+const {
+  articles = [],
+  currentSlug,
+  title = "Articles et guides complémentaires",
+} = Astro.props;
+
+// Strictly filter for published items, excluding the current article
+const publishedRelated = articles
+  .filter((item) => item.data.status === 'published' && (item.data.slug || item.id) !== currentSlug)
+  .slice(0, 3);
+---
+
+{
+  publishedRelated.length > 0 && (
+    <section class="related-content-section" aria-labelledby="related-title">
+      <h2 id="related-title" class="related-section-title">
+        {title}
+      </h2>
+      <div class="related-grid">
+        {publishedRelated.map((article) => {
+          const slug = article.data.slug || article.id;
+          const href = slug === 'iptv-buffering' ? '/assistance/iptv-buffering/' : `/${article.collection}/${slug}/`;
+          return (
+            <article class="related-card">
+              <span class="related-category">{article.data.category}</span>
+              <h3 class="related-card-title">
+                <a href={href} class="related-link">
+                  {article.data.title}
+                </a>
+              </h3>
+              <p class="related-card-desc">{article.data.description}</p>
+              <a href={href} class="related-read-more" aria-label={`Lire l'article : ${article.data.title}`}>
+                Consulter &rarr;
+              </a>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .related-content-section {
+    margin-top: var(--spacing-2xl);
+    padding-top: var(--spacing-2xl);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .related-section-title {
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--spacing-xl);
+  }
+
+  .related-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    transition: border-color 0.15s ease;
+  }
+
+  .related-card:hover {
+    border-color: var(--color-accent);
+  }
+
+  .related-category {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .related-card-title {
+    font-size: 1.15rem;
+    margin: 0;
+  }
+
+  .related-link {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .related-link:hover,
+  .related-link:focus-visible {
+    color: var(--color-accent);
+  }
+
+  .related-card-desc {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .related-read-more {
+    color: var(--color-accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin-top: var(--spacing-xs);
+  }
+
+  .related-read-more:hover {
+    text-decoration: underline;
+  }
+</style>

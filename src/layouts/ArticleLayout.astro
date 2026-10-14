@@ -1,0 +1,311 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs, { type BreadcrumbItem } from '../components/Breadcrumbs.astro';
+import RelatedContent from '../components/RelatedContent.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+import type { WhatsAppIntent } from '../utils/whatsapp';
+import type { BaseArticleFrontmatter } from '../content/schemas';
+
+interface Props {
+  entry: {
+    id: string;
+    data: BaseArticleFrontmatter;
+  };
+  collectionType: 'blog' | 'guides';
+  breadcrumbs?: BreadcrumbItem[];
+  relatedArticles?: any[];
+  supportIntent?: WhatsAppIntent;
+  supportLabel?: string;
+}
+
+const {
+  entry,
+  collectionType,
+  breadcrumbs: customBreadcrumbs,
+  relatedArticles = [],
+  supportIntent = 'article_question',
+  supportLabel,
+} = Astro.props;
+
+const { title, description, publishedAt, updatedAt, category, author, verifiedDeviceModel, verifiedOSVersion, verifiedApplication } = entry.data;
+
+const defaultBreadcrumbs: BreadcrumbItem[] = [
+  { label: 'Accueil', href: '/' },
+  { label: collectionType === 'blog' ? 'Blog' : 'Guides' },
+  { label: title },
+];
+
+const breadcrumbs = customBreadcrumbs || defaultBreadcrumbs;
+
+import { generateArticleSchema, generateBreadcrumbListSchema } from '../utils/jsonld';
+import { buildCanonicalUrl, getSiteCanonicalHost } from '../utils/seo';
+
+const siteUrl = getSiteCanonicalHost();
+const canonicalUrl = buildCanonicalUrl(Astro.url.pathname);
+
+const articleSchema = generateArticleSchema({
+  title,
+  description,
+  canonicalUrl,
+  publishedAt,
+  updatedAt,
+  author,
+  category,
+});
+
+const breadcrumbsSchema = generateBreadcrumbListSchema(breadcrumbs, siteUrl);
+const jsonLd = [articleSchema, breadcrumbsSchema];
+---
+
+<BaseLayout title={title} description={description} ogType="article" jsonLd={jsonLd}>
+  <div class="container article-container">
+    <Breadcrumbs items={breadcrumbs} />
+
+    <article class="article-main" id="article-content">
+      <header class="article-header">
+        <div class="article-meta-top">
+          <span class="article-category">{category}</span>
+          {publishedAt && (
+            <time datetime={publishedAt.toISOString()} class="article-date">
+              Publié le {publishedAt.toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
+            </time>
+          )}
+          {updatedAt && (
+            <span class="article-updated">
+              (Mis à jour le {updatedAt.toLocaleDateString('fr-FR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })})
+            </span>
+          )}
+        </div>
+
+        <h1 class="article-title">{title}</h1>
+        <p class="article-lead">{description}</p>
+
+        {author && <p class="article-author">Par <span class="author-name">{author}</span></p>}
+
+        {verifiedDeviceModel && (
+          <div class="technical-verification-card">
+            <h2 class="tech-card-title">Validation technique de ce guide</h2>
+            <ul class="tech-specs-list">
+              <li><strong>Modèle vérifié :</strong> {verifiedDeviceModel}</li>
+              {verifiedOSVersion && <li><strong>Système d'exploitation :</strong> {verifiedOSVersion}</li>}
+              {verifiedApplication && <li><strong>Application testée :</strong> {verifiedApplication}</li>}
+            </ul>
+          </div>
+        )}
+      </header>
+
+      <div class="article-prose">
+        <slot />
+      </div>
+
+      <footer class="article-footer">
+        <div class="article-support-box">
+          <h2 class="support-box-title">Une question technique sur ce sujet ?</h2>
+          <p class="support-box-desc">
+            Nos conseillers francophones sont disponibles sur WhatsApp pour vous aider dans la configuration de votre matériel.
+          </p>
+          <WhatsAppCTA
+            intent={supportIntent}
+            articleTitle={title}
+            label={supportLabel || (supportIntent === 'technical_support' ? "Contacter l'assistance technique sur WhatsApp" : "Poser une question sur cet article sur WhatsApp")}
+            sourceSection={supportIntent === 'technical_support' ? "support" : "blog"}
+            variant="secondary"
+          />
+        </div>
+      </footer>
+    </article>
+
+    {relatedArticles.length > 0 && (
+      <RelatedContent
+        articles={relatedArticles}
+        currentSlug={entry.data.slug || entry.id}
+      />
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .article-container {
+    max-width: 860px;
+    padding-top: var(--spacing-xl);
+    padding-bottom: var(--spacing-3xl);
+  }
+
+  .article-header {
+    margin-bottom: var(--spacing-2xl);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--spacing-xl);
+  }
+
+  .article-meta-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    font-size: 0.9rem;
+  }
+
+  .article-category {
+    background-color: rgba(37, 99, 235, 0.1);
+    color: var(--color-accent);
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+  }
+
+  .article-date,
+  .article-updated {
+    color: var(--color-text-muted);
+  }
+
+  .article-title {
+    font-size: clamp(1.85rem, 4vw, 2.5rem);
+    color: var(--color-text);
+    line-height: 1.25;
+    margin: var(--spacing-sm) 0 var(--spacing-md);
+  }
+
+  .article-lead {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .article-author {
+    font-size: 0.95rem;
+    color: var(--color-text-subtle);
+    margin-top: var(--spacing-md);
+  }
+
+  .author-name {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  .technical-verification-card {
+    margin-top: var(--spacing-xl);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .tech-card-title {
+    font-size: 1rem;
+    color: var(--color-text);
+    margin-top: 0;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .tech-specs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .tech-specs-list strong {
+    color: var(--color-text);
+  }
+
+  /* Prose Styling */
+  .article-prose {
+    color: var(--color-text);
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+
+  .article-prose :global(h2) {
+    font-size: 1.6rem;
+    color: var(--color-text);
+    margin-top: var(--spacing-2xl);
+    margin-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding-bottom: var(--spacing-xs);
+  }
+
+  .article-prose :global(h3) {
+    font-size: 1.3rem;
+    color: var(--color-text);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .article-prose :global(p) {
+    margin-bottom: var(--spacing-lg);
+    color: var(--color-text-muted);
+  }
+
+  .article-prose :global(ul),
+  .article-prose :global(ol) {
+    margin-bottom: var(--spacing-lg);
+    padding-left: var(--spacing-xl);
+    color: var(--color-text-muted);
+  }
+
+  .article-prose :global(li) {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .article-prose :global(strong) {
+    color: var(--color-text);
+  }
+
+  .article-prose :global(a) {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .article-prose :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    margin: var(--spacing-lg) 0;
+  }
+
+  /* Support Box */
+  .article-footer {
+    margin-top: var(--spacing-3xl);
+  }
+
+  .article-support-box {
+    background: linear-gradient(180deg, var(--color-surface) 0%, rgba(37, 99, 235, 0.08) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+    text-align: center;
+  }
+
+  .support-box-title {
+    font-size: 1.35rem;
+    color: var(--color-text);
+    margin-top: 0;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .support-box-desc {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-xl);
+  }
+</style>

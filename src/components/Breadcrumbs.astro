@@ -1,0 +1,81 @@
+---
+export interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<nav aria-label="Fil d'Ariane" class="breadcrumbs">
+  <ol class="breadcrumbs-list">
+    {items.map((item, index) => {
+      const isLast = index === items.length - 1;
+      return (
+        <li class="breadcrumbs-item">
+          {item.href && !isLast ? (
+            <a href={item.href} class="breadcrumb-link">
+              {item.label}
+            </a>
+          ) : (
+            <span class="breadcrumb-current" aria-current="page">
+              {item.label}
+            </span>
+          )}
+          {!isLast && <span class="breadcrumb-separator" aria-hidden="true">&rsaquo;</span>}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+<style>
+  .breadcrumbs {
+    padding: var(--spacing-sm) 0;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .breadcrumbs-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-xs);
+    font-size: 0.9rem;
+  }
+
+  .breadcrumbs-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--color-text-muted);
+  }
+
+  .breadcrumb-link {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color 0.15s ease;
+  }
+
+  .breadcrumb-link:hover,
+  .breadcrumb-link:focus-visible {
+    color: var(--color-accent);
+    text-decoration: underline;
+  }
+
+  .breadcrumb-separator {
+    color: var(--color-text-subtle);
+    user-select: none;
+  }
+
+  .breadcrumb-current {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+</style>

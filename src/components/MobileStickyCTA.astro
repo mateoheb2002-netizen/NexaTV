@@ -1,0 +1,155 @@
+---
+import type { WhatsAppIntent } from '../utils/whatsapp';
+import type { PlanId } from '../data/plans';
+import WhatsAppCTA from './WhatsAppCTA.astro';
+
+interface Props {
+  currentPath?: string;
+  intent?: WhatsAppIntent;
+  planId?: PlanId;
+  label?: string;
+  device?: string;
+}
+
+const {
+  currentPath = '/',
+  intent,
+  planId,
+  label,
+  device,
+} = Astro.props;
+
+// Contextual intent and label resolution
+let resolvedIntent: WhatsAppIntent = intent || 'general_information';
+let resolvedLabel = label || 'Discuter sur WhatsApp';
+
+if (!intent) {
+  if (currentPath.includes('/assistance/')) {
+    resolvedIntent = 'technical_support';
+    resolvedLabel = label || 'Assistance technique sur WhatsApp';
+  } else if (currentPath.includes('/appareils-compatibles/')) {
+    resolvedIntent = 'device_check';
+    resolvedLabel = label || 'Vérifier mon appareil sur WhatsApp';
+  } else if (currentPath.includes('/abonnement-iptv/')) {
+    resolvedIntent = 'general_information';
+    resolvedLabel = label || 'Commander mon accès sur WhatsApp';
+  } else {
+    resolvedIntent = 'general_information';
+    resolvedLabel = label || 'Discuter avec NexaTV sur WhatsApp';
+  }
+}
+---
+
+<div
+  id="mobile-sticky-cta-bar"
+  class="mobile-sticky-bar"
+  data-sticky-visible="false"
+  aria-hidden="true"
+>
+  <div class="mobile-sticky-container">
+    <WhatsAppCTA
+      intent={resolvedIntent}
+      planId={planId}
+      device={device}
+      label={resolvedLabel}
+      sourceSection="mobile_sticky"
+      variant="primary"
+      className="mobile-sticky-cta-btn"
+      tabindex={-1}
+    />
+  </div>
+</div>
+
+<script>
+  import { StickyCTAController } from '../utils/sticky-cta-controller';
+
+  function setupStickyBar() {
+    const stickyBar = document.getElementById('mobile-sticky-cta-bar');
+    if (!stickyBar) return;
+
+    // Detect hero trigger
+    const heroTrigger =
+      document.querySelector('.hero-actions') ||
+      document.querySelector('.hero') ||
+      document.querySelector('.pricing-intro-section') ||
+      document.querySelector('.device-intro-section') ||
+      document.querySelector('.assistance-intro-section');
+
+    // Equivalent in-page CTAs that suppress the sticky bar when in viewport
+    const inPageCTAs = Array.from(
+      document.querySelectorAll('.whatsapp-cta:not(.mobile-sticky-cta-btn)')
+    ) as HTMLElement[];
+
+    // Footer landmark to prevent obscuring legal & navigation links
+    const footer = document.querySelector('footer.site-footer') as HTMLElement | null;
+
+    const controller = new StickyCTAController({
+      stickyBarElement: stickyBar,
+      heroElement: heroTrigger as HTMLElement | null,
+      suppressElements: inPageCTAs,
+      footerElement: footer,
+    });
+
+    controller.init();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupStickyBar, { once: true });
+  } else {
+    setupStickyBar();
+  }
+</script>
+
+<style>
+  .mobile-sticky-bar {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-sticky-bar {
+      display: block;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      z-index: 40;
+      background-color: rgba(11, 15, 25, 0.95);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-top: 1px solid var(--color-border);
+      padding: var(--spacing-sm) var(--spacing-md);
+      padding-bottom: calc(var(--spacing-sm) + env(safe-area-inset-bottom, 0px));
+      transform: translateY(100%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .mobile-sticky-bar[data-sticky-visible="true"] {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .mobile-sticky-container {
+      width: 100%;
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+    }
+
+    .mobile-sticky-bar :global(.mobile-sticky-cta-btn) {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-sticky-bar {
+      transition: none !important;
+    }
+  }
+</style>

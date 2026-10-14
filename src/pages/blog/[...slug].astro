@@ -1,0 +1,23 @@
+---
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+
+export async function getStaticPaths() {
+  const publishedArticles = await getCollection('blog', ({ data }) => {
+    return data.status === 'published' && data.slug !== 'iptv-buffering';
+  });
+
+  return publishedArticles.map((entry) => ({
+    params: { slug: entry.data.slug || entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const allPublishedArticles = await getCollection('blog', ({ data }) => data.status === 'published');
+---
+
+<ArticleLayout entry={entry} collectionType="blog" relatedArticles={allPublishedArticles}>
+  <Content />
+</ArticleLayout>

@@ -1,0 +1,98 @@
+---
+import {
+  buildWhatsAppIntentLink,
+  isValidWhatsAppPhone,
+  sanitizeWhatsAppPhone,
+  type WhatsAppIntent,
+  type CTASection,
+  type WhatsAppMessageContext,
+} from '../utils/whatsapp';
+import type { PlanId } from '../data/plans';
+
+interface Props {
+  intent: WhatsAppIntent;
+  label: string;
+  sourceSection: CTASection;
+  planId?: PlanId;
+  phone?: string;
+  device?: string;
+  articleTitle?: string;
+  ariaLabel?: string;
+  tabindex?: number | string;
+  className?: string;
+  variant?: 'primary' | 'secondary' | 'outline';
+}
+
+const {
+  intent,
+  label,
+  sourceSection,
+  planId,
+  phone,
+  device,
+  articleTitle,
+  ariaLabel,
+  tabindex,
+  className = '',
+  variant = 'primary',
+} = Astro.props;
+
+// Map planId to pricing intent if needed
+let resolvedIntent: WhatsAppIntent = intent;
+if (planId && !intent.startsWith('pricing_')) {
+  resolvedIntent = `pricing_${planId}` as WhatsAppIntent;
+}
+
+// Resolve contact phone number safely
+let rawPhone: string | undefined = phone;
+if (!rawPhone && typeof process !== 'undefined' && process.env?.PUBLIC_WHATSAPP_PHONE) {
+  rawPhone = process.env.PUBLIC_WHATSAPP_PHONE;
+}
+if (!rawPhone && (import.meta as any).env?.PUBLIC_WHATSAPP_PHONE) {
+  rawPhone = (import.meta as any).env.PUBLIC_WHATSAPP_PHONE;
+}
+
+const resolvedPhone = rawPhone ? sanitizeWhatsAppPhone(rawPhone) : undefined;
+const hasValidPhone = Boolean(resolvedPhone && isValidWhatsAppPhone(resolvedPhone));
+
+let targetUrl: string | undefined;
+if (hasValidPhone && resolvedPhone) {
+  const context: WhatsAppMessageContext = { device, articleTitle };
+  targetUrl = buildWhatsAppIntentLink(resolvedPhone, resolvedIntent, context);
+}
+
+const accessibleDescription = ariaLabel || label;
+---
+
+{
+  hasValidPhone && targetUrl ? (
+    <a
+      href={targetUrl}
+      class:list={['whatsapp-cta', `whatsapp-cta-${variant}`, className]}
+      target="_blank"
+      rel="noopener noreferrer"
+      tabindex={tabindex !== undefined ? String(tabindex) : undefined}
+      data-cta-intent={resolvedIntent}
+      data-cta-source={sourceSection}
+      data-cta-plan={planId}
+      data-cta-status="configured"
+      aria-label={`${accessibleDescription} (ouvre WhatsApp dans un nouvel onglet)`}
+    >
+      <span class="whatsapp-cta-text">{label}</span>
+    </a>
+  ) : (
+    <a
+      class:list={['whatsapp-cta', `whatsapp-cta-${variant}`, 'whatsapp-cta-disabled', className]}
+      aria-disabled="true"
+      tabindex={tabindex !== undefined ? String(tabindex) : '-1'}
+      data-cta-intent={resolvedIntent}
+      data-cta-source={sourceSection}
+      data-cta-plan={planId}
+      data-cta-status="unconfigured"
+      aria-label={`${accessibleDescription} (contact WhatsApp en cours de configuration)`}
+      title="Contact WhatsApp temporairement indisponible (en cours de configuration)"
+    >
+      <span class="whatsapp-cta-text">{label}</span>
+    </a>
+  )
+}

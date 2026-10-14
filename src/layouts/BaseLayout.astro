@@ -1,0 +1,142 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileStickyCTA from '../components/MobileStickyCTA.astro';
+import type { WhatsAppIntent } from '../utils/whatsapp';
+import type { PlanId } from '../data/plans';
+import { buildCanonicalUrl } from '../utils/seo';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalUrl?: string;
+  noindex?: boolean;
+  ogType?: 'website' | 'article';
+  jsonLd?: Record<string, any> | Array<Record<string, any>>;
+  stickyCtaIntent?: WhatsAppIntent;
+  stickyCtaPlanId?: PlanId;
+  stickyCtaLabel?: string;
+}
+
+const {
+  title = 'NexaTV',
+  description = 'Plateforme web statique NexaTV.',
+  canonicalUrl: customCanonicalUrl,
+  noindex = false,
+  ogType = 'website',
+  jsonLd,
+  stickyCtaIntent,
+  stickyCtaPlanId,
+  stickyCtaLabel,
+} = Astro.props;
+
+const currentPath = Astro.url.pathname;
+const resolvedCanonicalUrl = customCanonicalUrl || buildCanonicalUrl(currentPath);
+const displayTitle = title.includes('NexaTV') ? title : `${title} | NexaTV`;
+---
+
+<!doctype html>
+<html lang="fr-FR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{displayTitle}</title>
+    <meta name="description" content={description} />
+    {noindex ? (
+      <meta name="robots" content="noindex, nofollow" />
+    ) : (
+      <link rel="canonical" href={resolvedCanonicalUrl} />
+    )}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="NexaTV" />
+    <meta property="og:title" content={displayTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={resolvedCanonicalUrl} />
+
+    <!-- Structured Data JSON-LD -->
+    {jsonLd && (
+      Array.isArray(jsonLd) ? (
+        jsonLd.map((schema) => (
+          <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+        ))
+      ) : (
+        <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+      )
+    )}
+
+    <!-- Slot for future consent-controlled analytics and approved SEO metadata -->
+    <slot name="head" />
+  </head>
+  <body>
+    <!-- Keyboard Accessible Skip Link -->
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
+
+    <!-- Site Header Landmark with Navigation -->
+    <Header currentPath={currentPath} />
+
+    <!-- Unique Main Landmark per Page -->
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+
+    <!-- Site Footer Landmark -->
+    <Footer />
+
+    <!-- Mobile Contextual Sticky WhatsApp CTA -->
+    <MobileStickyCTA
+      currentPath={currentPath}
+      intent={stickyCtaIntent}
+      planId={stickyCtaPlanId}
+      label={stickyCtaLabel}
+    />
+
+    <!-- Non-blocking Progressive Analytics Listener -->
+    <script>
+      import { trackCTAInteraction } from '../utils/analytics';
+
+      function initAnalyticsTracking() {
+        document.addEventListener(
+          'click',
+          (event) => {
+            const target = (event.target as HTMLElement)?.closest(
+              'a[data-cta-source], a.whatsapp-cta, a.btn'
+            ) as HTMLAnchorElement | null;
+            if (!target) return;
+
+            const source = (target.getAttribute('data-cta-source') || 'hero') as any;
+            const href = target.getAttribute('href') || '';
+            const isWhatsApp =
+              target.classList.contains('whatsapp-cta') ||
+              href.includes('wa.me') ||
+              target.hasAttribute('data-cta-intent');
+
+            const plan = target.getAttribute('data-cta-plan');
+            const planId = plan === '3m' || plan === '6m' || plan === '12m' ? (plan as any) : undefined;
+
+            trackCTAInteraction({
+              pagePath: window.location.pathname,
+              sectionId: source,
+              ctaType: isWhatsApp ? 'whatsapp' : 'internal',
+              planId,
+              interactionId: `${Date.now()}-${Math.random()}`,
+            });
+          },
+          { capture: true, passive: true }
+        );
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAnalyticsTracking, { once: true });
+      } else {
+        initAnalyticsTracking();
+      }
+    </script>
+  </body>
+</html>

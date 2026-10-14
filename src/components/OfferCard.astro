@@ -1,0 +1,176 @@
+---
+import type { Plan } from '../data/plans';
+import { formatPriceEUR, formatMonthlyEquivalent } from '../data/plans';
+import WhatsAppCTA from './WhatsAppCTA.astro';
+import type { WhatsAppIntent } from '../utils/whatsapp';
+
+interface Props {
+  plan: Plan;
+  ctaLabel?: string;
+  sourceSection?: 'pricing' | 'hero' | 'support';
+}
+
+const { plan, ctaLabel, sourceSection = 'pricing' } = Astro.props;
+const intentName = `pricing_${plan.id}` as WhatsAppIntent;
+const isPopular = plan.id === '12m';
+const buttonLabel = ctaLabel || `Choisir ${plan.durationMonths} mois`;
+const accessibleAriaLabel = `Choisir la formule ${plan.displayName} ${plan.durationMonths} mois à ${formatPriceEUR(plan.amountEUR)}`;
+---
+
+<article class:list={['offer-card', { 'offer-card-featured': isPopular }]}>
+  {plan.highlightReason && (
+    <div class="offer-badge">{plan.highlightReason}</div>
+  )}
+
+  <header class="offer-header">
+    <h3 class="offer-title">{plan.displayName}</h3>
+    <p class="offer-duration">{plan.durationMonths} mois d'accès</p>
+  </header>
+
+  <div class="offer-pricing">
+    <div class="offer-amount">
+      <span class="price-val">{formatPriceEUR(plan.amountEUR)}</span>
+      <span class="price-period">/ formule</span>
+    </div>
+    <p class="offer-monthly">
+      Soit {formatMonthlyEquivalent(plan.monthlyEquivalent, { includePerMonth: true })}
+    </p>
+  </div>
+
+  <ul class="offer-features">
+    <li>Formule {plan.durationMonths} mois sans prélèvement automatique</li>
+    <li>Activation et configuration guidée pas à pas</li>
+    <li>Assistance technique francophone dédiée</li>
+  </ul>
+
+  <footer class="offer-footer">
+    <WhatsAppCTA
+      intent={intentName}
+      planId={plan.id}
+      label={buttonLabel}
+      ariaLabel={accessibleAriaLabel}
+      sourceSection={sourceSection}
+      variant={isPopular ? 'primary' : 'secondary'}
+      className="offer-cta"
+    />
+  </footer>
+</article>
+
+<style>
+  .offer-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+
+  .offer-card:hover {
+    border-color: var(--color-border-subtle);
+  }
+
+  .offer-card-featured {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 24px rgba(56, 189, 248, 0.15);
+  }
+
+  .offer-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--color-accent);
+    color: #0b0f19;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .offer-header {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .offer-title {
+    font-size: 1.5rem;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .offer-duration {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .offer-pricing {
+    text-align: center;
+    background-color: var(--color-surface-hover);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .offer-amount {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: var(--spacing-xs);
+  }
+
+  .price-val {
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: var(--color-text);
+  }
+
+  .price-period {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+  }
+
+  .offer-monthly {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    margin-top: 4px;
+  }
+
+  .offer-features {
+    list-style: none;
+    margin-bottom: var(--spacing-xl);
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .offer-features li {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    position: relative;
+    padding-left: 20px;
+  }
+
+  .offer-features li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--color-success);
+    font-weight: bold;
+  }
+
+  .offer-footer {
+    margin-top: auto;
+  }
+
+  .offer-footer :global(.offer-cta) {
+    width: 100%;
+  }
+</style>

@@ -1,0 +1,37 @@
+---
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import type { BreadcrumbItem } from '../../components/Breadcrumbs.astro';
+
+export async function getStaticPaths() {
+  const publishedArticles = await getCollection('blog', ({ data }) => {
+    return data.status === 'published' && data.slug === 'iptv-buffering';
+  });
+
+  return publishedArticles.map((entry) => ({
+    params: { slug: 'iptv-buffering' },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+
+const breadcrumbs: BreadcrumbItem[] = [
+  { label: 'Accueil', href: '/' },
+  { label: 'Assistance', href: '/assistance/' },
+  { label: entry.data.title },
+];
+
+const allPublishedBlog = await getCollection('blog', ({ data }) => data.status === 'published');
+---
+
+<ArticleLayout
+  entry={entry}
+  collectionType="blog"
+  breadcrumbs={breadcrumbs}
+  supportIntent="technical_support"
+  relatedArticles={allPublishedBlog}
+>
+  <Content />
+</ArticleLayout>

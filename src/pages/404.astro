@@ -1,0 +1,124 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+
+const pageTitle = "Page non trouvée (404) | NexaTV";
+const pageDescription = "La page demandée n'existe pas ou a été déplacée. Retrouvez nos offres d'abonnement IPTV, nos guides d'appareils et notre assistance technique.";
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} noindex={true}>
+  <section class="error-section section" aria-labelledby="error-title">
+    <div class="container text-center">
+      <div class="error-badge">Erreur 404</div>
+      <h1 id="error-title" class="error-title">Page introuvable</h1>
+      <p class="error-lead">
+        La ressource demandée n'existe pas, a été déplacée ou son adresse est momentanément inaccessible.
+      </p>
+
+      <div class="recovery-actions">
+        <a href="/" class="btn btn-primary" data-cta-source="hero">
+          Retour à l'accueil
+        </a>
+        <a href="/abonnement-iptv/" class="btn btn-secondary" data-cta-source="pricing">
+          Consulter les tarifs
+        </a>
+        <a href="/assistance/" class="btn btn-secondary" data-cta-source="support">
+          Centre d'assistance
+        </a>
+      </div>
+
+      <div class="recovery-help-box">
+        <h2 class="recovery-help-title">Besoin d'une orientation immédiate ?</h2>
+        <p class="recovery-help-desc">
+          Si vous cherchiez un renseignement précis ou une aide à la configuration, notre équipe technique est disponible pour vous guider directement.
+        </p>
+        <div class="help-cta-wrap">
+          <WhatsAppCTA
+            intent="technical_support"
+            label="Contacter le support sur WhatsApp"
+            sourceSection="support"
+            variant="outline"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .error-section {
+    padding-top: var(--spacing-3xl);
+    padding-bottom: var(--spacing-3xl);
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+
+  .error-badge {
+    display: inline-block;
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    padding: 4px 14px;
+    border-radius: 9999px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--spacing-md);
+    text-transform: uppercase;
+  }
+
+  .error-title {
+    font-size: clamp(2rem, 5vw, 3rem);
+    color: var(--color-text);
+    margin: 0 0 var(--spacing-md);
+    line-height: 1.2;
+  }
+
+  .error-lead {
+    font-size: 1.15rem;
+    color: var(--color-text-muted);
+    max-width: 620px;
+    margin: 0 auto var(--spacing-2xl);
+    line-height: 1.6;
+  }
+
+  .recovery-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-3xl);
+  }
+
+  .recovery-help-box {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .recovery-help-title {
+    font-size: 1.2rem;
+    color: var(--color-text);
+    margin: 0 0 var(--spacing-xs);
+  }
+
+  .recovery-help-desc {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .help-cta-wrap {
+    display: flex;
+    justify-content: center;
+  }
+</style>

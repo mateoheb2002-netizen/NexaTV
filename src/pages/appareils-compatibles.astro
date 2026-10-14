@@ -1,0 +1,281 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import DeviceCard from '../components/DeviceCard.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+import { DEVICE_FAMILIES } from '../data/devices';
+
+const pageTitle = "Compatibilité des appareils avec NexaTV : vérification de votre équipement";
+const pageDescription = "Vérifiez la compatibilité de votre équipement avec NexaTV : Samsung Smart TV, LG Smart TV, Android TV, Google TV et Amazon Fire TV. Conseils d'identification et support francophone.";
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <!-- 1. Intro Section -->
+  <section class="device-intro-section section">
+    <div class="container text-center">
+      <h1 class="section-title">Compatibilité des appareils avec NexaTV</h1>
+      <p class="section-subtitle">
+        Des vérifications techniques transparentes avant tout abonnement. Chaque téléviseur et système d'exploitation possédant ses spécificités, nous validons votre équipement au préalable pour éviter toute déception.
+      </p>
+
+      <div class="intro-badges">
+        <span class="intro-badge">✓ Diagnostic matériel individuel</span>
+        <span class="intro-badge">✓ Aucun engagement préalable exigé</span>
+        <span class="intro-badge">✓ Assistance francophone dédiée</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Device Families Grid Section -->
+  <section class="devices-grid-section section" id="appareils" aria-labelledby="devices-grid-title">
+    <div class="container">
+      <div class="text-center section-header">
+        <h2 id="devices-grid-title" class="section-title">Équipements et familles d'appareils</h2>
+        <p class="section-subtitle">
+          Consultez la marche à suivre pour chaque famille de matériel et transmettez vos références à notre équipe.
+        </p>
+      </div>
+
+      <div class="devices-grid">
+        {DEVICE_FAMILIES.map((device) => (
+          <DeviceCard device={device} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Key Difference: Player Compatibility vs Service Compatibility -->
+  <section class="compatibility-clarification-section section" aria-labelledby="player-vs-service-title">
+    <div class="container">
+      <div class="clarification-box">
+        <h2 id="player-vs-service-title" class="section-title text-center">
+          Lecteur vs Flux : comprendre la compatibilité réelle
+        </h2>
+        <p class="section-subtitle text-center">
+          Pourquoi la disponibilité d'une application sur votre écran ne suffit pas à garantir un fonctionnement fluide.
+        </p>
+
+        <div class="clarification-columns">
+          <div class="clarification-col">
+            <h3 class="col-title">1. Compatibilité de l'application (Lecteur)</h3>
+            <p>
+              Une application multimédia peut être téléchargée librement depuis la boutique officielle de votre téléviseur (Smart Hub, LG Content Store, Google Play Store ou Amazon Appstore). Cela prouve uniquement que l'application s'installe sur votre système d'exploitation.
+            </p>
+          </div>
+
+          <div class="clarification-col">
+            <h3 class="col-title">2. Compatibilité du flux et du processeur</h3>
+            <p>
+              Le décodage continu des flux vidéo haute définition requiert des capacités matérielles suffisantes (codecs H.264/H.265, mémoire vive disponible, stabilité de la puce Wi-Fi ou Ethernet). Un appareil plus ancien peut exécuter un lecteur tout en subissant des saccades.
+            </p>
+          </div>
+        </div>
+
+        <div class="clarification-note">
+          <p>
+            <strong>Notre démarche de transparence :</strong> NexaTV ne formule aucune promesse d'interopérabilité générale sans diagnostic préalable. Nous vous aidons à identifier votre modèle et recommandons un test technique préalable avant toute finalisation de commande.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. How to Identify Model & OS -->
+  <section class="identification-guide-section section" aria-labelledby="identification-title">
+    <div class="container">
+      <div class="text-center section-header">
+        <h2 id="identification-title" class="section-title">Comment identifier votre matériel ?</h2>
+        <p class="section-subtitle">
+          Deux informations essentielles permettent à notre équipe de vous renseigner précisément.
+        </p>
+      </div>
+
+      <div class="identification-steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3 class="step-title">Le code du modèle exact</h3>
+          <p class="step-desc">
+            Situé sur l'étiquette au dos de votre téléviseur ou dans le menu « À propos de ce téléviseur / Assistance ». Il indique la gamme, la taille et l'année de fabrication (par exemple : <em>QE55Q60A</em> ou <em>OLED55C1</em>).
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3 class="step-title">La version du système d'exploitation</h3>
+          <p class="step-desc">
+            Indique la révision logicielle de votre appareil (ex. Tizen 6.0, webOS 5.0, Android 11, Fire OS 7). Cette information détermine les lecteurs multimédias optimisés disponibles sur votre boutique d'applications.
+          </p>
+        </div>
+
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3 class="step-title">Le mode de connexion réseau</h3>
+          <p class="step-desc">
+            La stabilité de la diffusion dépend de votre débit internet domestique. Nous préconisons un débit minimal de 10 à 15 Mbps et recommandons l'usage d'un câble Ethernet plutôt que le Wi-Fi si votre routeur est éloigné.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Route back to Pricing & Final CTA -->
+  <section class="device-final-cta-section section" aria-labelledby="device-cta-title">
+    <div class="container text-center">
+      <div class="final-box">
+        <h2 id="device-cta-title" class="section-title">Votre appareil est identifié ?</h2>
+        <p class="section-subtitle">
+          Contactez notre conseiller sur WhatsApp avec votre référence pour un avis technique rapide et sans engagement, ou consultez nos tarifs d'abonnement.
+        </p>
+
+        <div class="final-actions">
+          <WhatsAppCTA
+            intent="device_check"
+            label="Vérifier mon appareil avec un conseiller"
+            sourceSection="compatibility"
+            variant="primary"
+          />
+          <a href="/abonnement-iptv/" class="btn btn-secondary" data-cta-source="compatibility">
+            Consulter les tarifs d'abonnement
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .text-center {
+    text-align: center;
+  }
+
+  .section-header {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .intro-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-sm) var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+  }
+
+  .intro-badge {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+
+  /* Devices Grid */
+  .devices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+  }
+
+  /* Clarification Box */
+  .clarification-box {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+  }
+
+  .clarification-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-2xl);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .clarification-col {
+    background-color: var(--color-surface-hover);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-md);
+  }
+
+  .col-title {
+    font-size: 1.15rem;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .clarification-col p {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .clarification-note {
+    border-top: 1px solid var(--color-border-subtle);
+    padding-top: var(--spacing-lg);
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+  }
+
+  /* Identification Steps */
+  .identification-steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--spacing-xl);
+  }
+
+  .step-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .step-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    color: #0b0f19;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .step-title {
+    font-size: 1.15rem;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .step-desc {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Final Box */
+  .final-box {
+    background: linear-gradient(180deg, var(--color-surface) 0%, rgba(37, 99, 235, 0.1) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+  }
+
+  .final-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+  }
+</style>

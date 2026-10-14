@@ -1,0 +1,338 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OfferCard from '../components/OfferCard.astro';
+import FAQSection from '../components/FAQSection.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+import { PLANS } from '../data/plans';
+import { generateWebSiteSchema, generateFAQPageSchema } from '../utils/jsonld';
+import { getSiteCanonicalHost } from '../utils/seo';
+import { HOME_FAQ_ITEMS } from '../data/faq';
+
+const pageTitle = "NexaTV : votre abonnement IPTV en France dès 12 €";
+const pageDescription = "Découvrez les offres NexaTV pour votre abonnement IPTV en France métropolitaine dès 12 €. Formules 3, 6 et 12 mois sans engagement, assistance dédiée.";
+
+const siteUrl = getSiteCanonicalHost();
+const jsonLd = [
+  generateWebSiteSchema({ siteUrl, siteName: 'NexaTV' }),
+  generateFAQPageSchema(HOME_FAQ_ITEMS),
+];
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} jsonLd={jsonLd}>
+  <!-- 1. Hero Section -->
+  <section class="hero-section section">
+    <div class="container text-center">
+      <h1 class="hero-title">NexaTV : votre abonnement IPTV en France dès 12 €</h1>
+      <p class="hero-subtitle">
+        Accédez à une sélection de chaînes télévisées et flux multimédias avec une configuration rapide et un accompagnement francophone personnalisé.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#offres" class="btn btn-primary" data-cta-source="hero">Voir les offres NexaTV</a>
+        <a href="/appareils-compatibles/" class="btn btn-secondary" data-cta-source="hero">Vérifier mon appareil</a>
+      </div>
+
+      <div class="hero-highlights">
+        <span class="highlight-item">✓ Formules dès 12 €</span>
+        <span class="highlight-item">✓ Sans prélèvement automatique</span>
+        <span class="highlight-item">✓ Assistance technique réactive</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Subscription Overview Section -->
+  <section class="subscription-overview-section section" id="offres" aria-labelledby="offers-title">
+    <div class="container text-center">
+      <h2 id="offers-title" class="section-title">Nos formules d'abonnement</h2>
+      <p class="section-subtitle">
+        Choisissez la durée qui vous convient le mieux, sans engagement de reconduction tacite.
+      </p>
+
+      <div class="offers-grid">
+        {PLANS.map((plan) => (
+          <OfferCard plan={plan} />
+        ))}
+      </div>
+
+      <div class="offers-more-info">
+        <p>
+          Besoin d'un comparatif exhaustif ?
+          <a href="/abonnement-iptv/" class="link-crawlable">Consulter le détail complet des abonnements</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Device Compatibility Section -->
+  <section class="compatibility-section section" aria-labelledby="compatibility-title">
+    <div class="container">
+      <div class="card-box">
+        <div class="card-content">
+          <h2 id="compatibility-title" class="section-title">Compatibilité de vos appareils</h2>
+          <p class="section-text">
+            NexaTV s'adapte à la majorité des téléviseurs connectés et supports multimédias récents : Smart TV (Samsung, LG, Philips), boîtiers Android TV, Fire TV Stick, Apple TV, ainsi que tablettes, smartphones et ordinateurs.
+          </p>
+          <p class="section-subtext">
+            Avant toute commande, nous vous recommandons de vérifier la compatibilité exacte de votre équipement et de l'application de lecture souhaitée.
+          </p>
+          <div class="card-actions">
+            <a href="/appareils-compatibles/" class="btn btn-secondary">Vérifier mon appareil</a>
+            <WhatsAppCTA
+              intent="device_check"
+              label="Contrôler la compatibilité sur WhatsApp"
+              sourceSection="compatibility"
+              variant="outline"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Included-Content Verification Section -->
+  <section class="verification-section section" aria-labelledby="verification-title">
+    <div class="container">
+      <div class="verification-box">
+        <h2 id="verification-title" class="section-title">Vérification préalable du catalogue</h2>
+        <p class="section-text">
+          La disponibilité des chaînes et bouquets peut varier selon les régions et les accords de diffusion en vigueur en France métropolitaine.
+        </p>
+        <p class="section-subtext">
+          Nous vous invitons à contacter notre équipe afin de vous assurer que les programmes, résolutions et catégories que vous souhaitez visionner correspondent parfaitement à votre attente.
+        </p>
+        <div class="verification-actions">
+          <WhatsAppCTA
+            intent="general_information"
+            label="Demander la liste des chaînes disponibles"
+            sourceSection="compatibility"
+            variant="secondary"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. How to Choose a Plan Section -->
+  <section class="choose-plan-section section" aria-labelledby="choose-title">
+    <div class="container">
+      <div class="text-center">
+        <h2 id="choose-title" class="section-title">Comment choisir votre formule ?</h2>
+        <p class="section-subtitle">
+          Une transparence totale sur le coût d'entrée et le coût mensuel amorti.
+        </p>
+      </div>
+
+      <div class="choice-cards-grid">
+        <div class="choice-card">
+          <h3 class="choice-card-title">Formule Découverte (3 mois)</h3>
+          <p class="choice-card-text">
+            Le coût d'entrée le plus accessible (12 €). Idéal pour évaluer la qualité du flux, tester la réactivité du service et la compatibilité de votre matériel sans engagement prolongé.
+          </p>
+        </div>
+
+        <div class="choice-card">
+          <h3 class="choice-card-title">Formule Standard (6 mois)</h3>
+          <p class="choice-card-text">
+            Une formule intermédiaire à 24 € (soit 4 €/mois). Elle vous offre la tranquillité pendant un semestre complet sans surcoût unitaire par rapport au forfait trimestriel.
+          </p>
+        </div>
+
+        <div class="choice-card choice-card-featured">
+          <h3 class="choice-card-title">Formule Annuelle (12 mois)</h3>
+          <p class="choice-card-text">
+            Le meilleur tarif mensuel NexaTV : 35 € pour un an d'accès complet (~2,92 €/mois). Vous réalisez une économie de 13 € par rapport au renouvellement de quatre forfaits trimestriels consécutifs.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Assistance and Conditions Section -->
+  <section class="support-section section" aria-labelledby="support-title">
+    <div class="container">
+      <div class="support-box">
+        <h2 id="support-title" class="section-title">Assistance technique & conditions d'usage</h2>
+        <p class="section-text">
+          Pour bénéficier d'une expérience visuelle agréable, une connexion haut débit ou très haut débit (Fibre, VDSL ou 4G/5G stable) d'au minimum 10 à 15 Mbps est recommandée.
+        </p>
+        <p class="section-subtext">
+          Notre équipe vous accompagne pour la saisie des identifiants et le paramétrage des applications compatibles. En cas de ralentissement ou de question, consultez notre espace d'aide dédié.
+        </p>
+        <div class="support-actions">
+          <a href="/assistance/" class="btn btn-secondary">Centre d'assistance technique</a>
+          <WhatsAppCTA
+            intent="technical_support"
+            label="Contacter le support WhatsApp"
+            sourceSection="support"
+            variant="outline"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. FAQ Section -->
+  <div class="faq-section-wrapper">
+    <FAQSection />
+  </div>
+
+  <!-- 8. Final CTA Section -->
+  <section class="final-cta-section section" aria-labelledby="final-cta-title">
+    <div class="container text-center">
+      <div class="final-cta-box">
+        <h2 id="final-cta-title" class="section-title">Prêt à configurer votre accès NexaTV ?</h2>
+        <p class="section-subtitle">
+          Échangez en direct avec un conseiller pour valider votre appareil et recevoir vos identifiants personnalisés.
+        </p>
+        <div class="final-cta-buttons">
+          <WhatsAppCTA
+            intent="general_information"
+            label="Échanger avec un conseiller sur WhatsApp"
+            sourceSection="hero"
+            variant="primary"
+          />
+          <a href="#offres" class="btn btn-secondary">Revoir les formules</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .text-center {
+    text-align: center;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    padding-top: var(--spacing-2xl);
+    padding-bottom: var(--spacing-2xl);
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 800;
+    line-height: 1.2;
+    color: var(--color-text);
+    max-width: 900px;
+    margin: 0 auto var(--spacing-md);
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    max-width: 680px;
+    margin: 0 auto var(--spacing-xl);
+    line-height: 1.6;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .hero-highlights {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-md) var(--spacing-xl);
+    color: var(--color-accent);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  /* Cards and Boxes */
+  .card-box,
+  .verification-box,
+  .support-box,
+  .final-cta-box {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+  }
+
+  .card-box {
+    text-align: center;
+  }
+
+  .section-text {
+    font-size: 1.1rem;
+    color: var(--color-text);
+    max-width: 760px;
+    margin: 0 auto var(--spacing-sm);
+    line-height: 1.6;
+  }
+
+  .section-subtext {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    max-width: 760px;
+    margin: 0 auto var(--spacing-lg);
+    line-height: 1.5;
+  }
+
+  .card-actions,
+  .verification-actions,
+  .support-actions,
+  .final-cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-md);
+  }
+
+  .link-crawlable {
+    color: var(--color-accent);
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .offers-more-info {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-lg);
+  }
+
+  /* Choice Cards Grid */
+  .choice-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+  }
+
+  .choice-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xl);
+    text-align: left;
+  }
+
+  .choice-card-featured {
+    border-color: var(--color-accent);
+    background-color: rgba(56, 189, 248, 0.03);
+  }
+
+  .choice-card-title {
+    font-size: 1.25rem;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .choice-card-text {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .final-cta-box {
+    background: linear-gradient(180deg, var(--color-surface) 0%, rgba(37, 99, 235, 0.1) 100%);
+    border-color: var(--color-border);
+  }
+</style>

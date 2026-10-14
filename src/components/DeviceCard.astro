@@ -1,0 +1,199 @@
+---
+import type { DeviceRecord } from '../data/devices';
+import WhatsAppCTA from './WhatsAppCTA.astro';
+
+interface Props {
+  device: DeviceRecord;
+}
+
+const { device } = Astro.props;
+---
+
+<article class="device-card" id={`device-${device.id}`}>
+  <header class="device-card-header">
+    <div class="device-header-top">
+      <h3 class="device-title">{device.deviceFamily}</h3>
+      <span class="device-status-badge">Vérification requise</span>
+    </div>
+    <p class="device-platform">
+      <span class="platform-label">Système d'exploitation :</span>
+      <span class="platform-value">{device.platform}</span>
+    </p>
+  </header>
+
+  <div class="device-card-body">
+    <div class="instruction-block">
+      <h4 class="instruction-heading">Comment identifier le modèle exact :</h4>
+      <p class="instruction-text">{device.modelCheckInstructions}</p>
+    </div>
+
+    <div class="instruction-block">
+      <h4 class="instruction-heading">Comment vérifier la version du système :</h4>
+      <p class="instruction-text">{device.osCheckInstructions}</p>
+    </div>
+
+    {device.verifiedNotes && (
+      <div class="device-notes-block">
+        <h4 class="instruction-heading">Point de vigilance technique :</h4>
+        <p class="device-notes-text">{device.verifiedNotes}</p>
+      </div>
+    )}
+
+    {device.publishedGuideUrl ? (
+      <div class="device-guide-block">
+        <a href={device.publishedGuideUrl} class="device-guide-link">
+          Consulter le guide d'installation &rarr;
+        </a>
+      </div>
+    ) : (
+      <div class="device-guide-block guide-pending">
+        <p class="guide-pending-text">Guide d'installation officiel en cours de validation technique.</p>
+      </div>
+    )}
+  </div>
+
+  <footer class="device-card-footer">
+    <WhatsAppCTA
+      intent="device_check"
+      device={device.deviceFamily}
+      label="Vérifier cet appareil"
+      ariaLabel={`Vérifier la compatibilité pour ${device.deviceFamily}`}
+      sourceSection="compatibility"
+      variant="secondary"
+      className="device-card-cta"
+    />
+  </footer>
+</article>
+
+<style>
+  .device-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    transition: border-color 0.15s ease;
+  }
+
+  .device-card:hover {
+    border-color: var(--color-border-subtle);
+  }
+
+  .device-card-header {
+    border-bottom: 1px solid var(--color-border-subtle);
+    padding-bottom: var(--spacing-md);
+  }
+
+  .device-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .device-title {
+    font-size: 1.35rem;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .device-status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 9999px;
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    white-space: nowrap;
+  }
+
+  .device-platform {
+    font-size: 0.9rem;
+    margin: 0;
+    color: var(--color-text-muted);
+  }
+
+  .platform-label {
+    font-weight: 500;
+  }
+
+  .platform-value {
+    color: var(--color-accent);
+    font-weight: 600;
+  }
+
+  .device-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    flex-grow: 1;
+  }
+
+  .instruction-block {
+    background-color: var(--color-surface-hover);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+  }
+
+  .instruction-heading {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-text);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .instruction-text {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .device-notes-block {
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--spacing-md);
+  }
+
+  .device-notes-text {
+    font-size: 0.88rem;
+    color: var(--color-text-subtle);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .device-guide-block {
+    margin-top: var(--spacing-xs);
+  }
+
+  .device-guide-link {
+    color: var(--color-accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .guide-pending-text {
+    font-size: 0.82rem;
+    color: var(--color-text-subtle);
+    font-style: italic;
+    margin: 0;
+  }
+
+  .device-card-footer {
+    margin-top: auto;
+    padding-top: var(--spacing-sm);
+  }
+
+  .device-card-footer :global(.device-card-cta) {
+    width: 100%;
+  }
+</style>

@@ -1,0 +1,502 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OfferCard from '../components/OfferCard.astro';
+import WhatsAppCTA from '../components/WhatsAppCTA.astro';
+import { PLANS } from '../data/plans';
+
+const pageTitle = "Abonnement IPTV NexaTV : nos formules 3, 6 et 12 mois";
+const pageDescription = "Comparez les formules d'abonnement IPTV NexaTV en France métropolitaine : 3 mois (12 €), 6 mois (24 €) et 12 mois (35 €). Tarifs transparents sans reconduction tacite.";
+
+const PRICING_FAQ_ITEMS = [
+  {
+    question: "Comment choisir entre la formule 3 mois et la formule 12 mois ?",
+    answer:
+      "La formule Découverte 3 mois (12 €) présente le coût d'entrée le plus accessible pour évaluer le service sur votre équipement. La formule Annuelle 12 mois (35 €) offre le tarif mensuel amorti le plus avantageux (~2,92 €/mois), permettant d'économiser 13 € par rapport à quatre forfaits trimestriels successifs.",
+  },
+  {
+    question: "La formule 6 mois propose-t-elle un tarif mensuel dégressif ?",
+    answer:
+      "Non, la formule Standard 6 mois à 24 € maintient exactement le même tarif mensuel de 4 €/mois que la formule 3 mois. Elle apporte simplement le confort d'un semestre d'accès sans avoir à renouveler trimestriellement.",
+  },
+  {
+    question: "Comment s'effectue le paiement de l'abonnement ?",
+    answer:
+      "NexaTV ne dispose d'aucun module de prélèvement automatique ni de paiement direct en ligne sur le site. Les modalités de règlement sont convenues et finalisées de gré à gré lors de votre échange sur WhatsApp avec notre conseiller commercial.",
+  },
+  {
+    question: "Mon abonnement sera-t-il renouvelé automatiquement ?",
+    answer:
+      "Absolument pas. Aucun renouvellement automatique n'est appliqué. À l'échéance de la période souscrite (3, 6 ou 12 mois), votre accès prend fin naturellement, sauf si vous demandez expressément une nouvelle formule.",
+  },
+  {
+    question: "Quelle est la politique de remboursement ou d'essai ?",
+    answer:
+      "Les conditions d'essai, de test préalable et de remboursement éventuel doivent être vérifiées directement auprès de notre équipe avant tout versement. Nous vous encourageons à vérifier la compatibilité de votre appareil avant de finaliser votre souscription.",
+  },
+];
+
+import { generateProductOffersSchema, generateFAQPageSchema } from '../utils/jsonld';
+import { getSiteCanonicalHost } from '../utils/seo';
+
+const siteUrl = getSiteCanonicalHost();
+const jsonLd = [
+  generateProductOffersSchema({ siteUrl, plans: PLANS }),
+  generateFAQPageSchema(PRICING_FAQ_ITEMS),
+];
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} jsonLd={jsonLd}>
+  <!-- 1. Introduction Section -->
+  <section class="pricing-intro-section section">
+    <div class="container text-center">
+      <h1 class="section-title">Abonnement IPTV NexaTV : nos formules 3, 6 et 12 mois</h1>
+      <p class="section-subtitle">
+        Des tarifs clairs et vérifiés dès 12 €. Choisissez la durée adaptée à vos habitudes de visionnage, sans engagement de reconduction tacite.
+      </p>
+
+      <div class="intro-badges">
+        <span class="intro-badge">✓ Aucun prélèvement bancaire récurrent</span>
+        <span class="intro-badge">✓ Assistance francophone incluse</span>
+        <span class="intro-badge">✓ Activation manuelle sur WhatsApp</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Pricing Comparison Section -->
+  <section class="pricing-comparison-section section" id="tarifs" aria-labelledby="pricing-comparison-title">
+    <div class="container">
+      <div class="text-center">
+        <h2 id="pricing-comparison-title" class="sr-only">Comparatif des formules</h2>
+      </div>
+
+      <div class="offers-grid">
+        {PLANS.map((plan) => (
+          <OfferCard
+            plan={plan}
+            ctaLabel={
+              plan.id === '3m'
+                ? 'Choisir 3 mois'
+                : plan.id === '6m'
+                ? 'Choisir 6 mois'
+                : 'Choisir 12 mois'
+            }
+            sourceSection="pricing"
+          />
+        ))}
+      </div>
+
+      <div class="pricing-transparency-note text-center">
+        <p>
+          Tous les tarifs affichés sont des montants forfaitaires totaux en euros (€), sans frais de dossier cachés.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. How to Choose a Subscription Section -->
+  <section class="pricing-how-to-choose-section section" aria-labelledby="how-to-choose-title">
+    <div class="container">
+      <div class="text-center">
+        <h2 id="how-to-choose-title" class="section-title">Comment choisir votre abonnement ?</h2>
+        <p class="section-subtitle">
+          Chaque formule répond à un besoin spécifique en fonction de votre budget et de votre visibilité.
+        </p>
+      </div>
+
+      <div class="comparison-guide-grid">
+        <div class="guide-item">
+          <div class="guide-item-header">
+            <h3>Formule 3 mois — 12 €</h3>
+            <span class="guide-tag">Coût d'entrée minimal</span>
+          </div>
+          <p>
+            À seulement 12 € au total (soit 4 €/mois), cette formule est idéale si vous découvrez NexaTV ou souhaitez vérifier la fluidité du service sur votre réseau internet domestique.
+          </p>
+        </div>
+
+        <div class="guide-item">
+          <div class="guide-item-header">
+            <h3>Formule 6 mois — 24 €</h3>
+            <span class="guide-tag">Tranquillité semestrielle</span>
+          </div>
+          <p>
+            Facturée 24 €, cette offre conserve un coût proportionnel de 4 €/mois sans surcoût. Elle vous évite de devoir contacter le support tous les trois mois pour renouveler votre accès.
+          </p>
+        </div>
+
+        <div class="guide-item guide-item-featured">
+          <div class="guide-item-header">
+            <h3>Formule 12 mois — 35 €</h3>
+            <span class="guide-tag highlight">Meilleur tarif mensuel NexaTV</span>
+          </div>
+          <p>
+            Avec un coût annuel de 35 €, le coût mensuel descend à environ ~2,92 €/mois. Cela représente une économie nette de 13 € par an comparé à quatre formules trimestrielles successives (48 € vs 35 €).
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Included Features Section -->
+  <section class="pricing-features-section section" aria-labelledby="features-title">
+    <div class="container">
+      <div class="features-box">
+        <h2 id="features-title" class="section-title text-center">Caractéristiques vérifiées de nos formules</h2>
+        <p class="section-subtitle text-center">
+          Ce qui est rigoureusement inclus dans chaque abonnement NexaTV.
+        </p>
+
+        <div class="features-checklist-grid">
+          <div class="feature-item">
+            <h3 class="feature-name">Accompagnement francophone</h3>
+            <p class="feature-desc">Une équipe disponible sur WhatsApp pour vous guider lors de l'installation initiale.</p>
+          </div>
+          <div class="feature-item">
+            <h3 class="feature-name">Flexibilité totale</h3>
+            <p class="feature-desc">Aucun contrat pluriannuel ni engagement forcé : votre compte expire naturellement à la fin de la période.</p>
+          </div>
+          <div class="feature-item">
+            <h3 class="feature-name">Liberté d'application</h3>
+            <p class="feature-desc">Compatible avec les lecteurs courants du marché selon votre équipement (Smart TV, boîtier ou mobile).</p>
+          </div>
+          <div class="feature-item">
+            <h3 class="feature-name">Zéro frais cachés</h3>
+            <p class="feature-desc">Le prix payé correspond exactement à la durée convenue, sans facturation supplémentaire inattendue.</p>
+          </div>
+        </div>
+
+        <div class="features-disclaimer">
+          <p>
+            <strong>Note de transparence :</strong> Les paramètres techniques précis (nombre de flux d'accès utilisables, applications recommandées et bouquets régionaux) doivent être validés en amont avec un conseiller avant de commander.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Payment and Renewal Information Section -->
+  <section class="pricing-payment-renewal-section section" aria-labelledby="payment-title">
+    <div class="container">
+      <div class="info-card">
+        <h2 id="payment-title" class="section-title">Modalités de paiement et renouvellement</h2>
+        <div class="info-content">
+          <p>
+            Afin de garantir votre sécurité et un suivi personnalisé, le processus de souscription NexaTV s'effectue manuellement. Aucun paiement direct, aucun formulaire bancaire ni panier d'achat n'est hébergé sur ce site.
+          </p>
+          <ul class="info-list">
+            <li><strong>Initiation sur WhatsApp :</strong> Vous indiquez la formule choisie à notre conseiller.</li>
+            <li><strong>Validation préalable :</strong> Vous confirmez votre appareil et vos exigences techniques.</li>
+            <li><strong>Paiement ponctuel :</strong> Vous réglez uniquement le forfait convenu (12 €, 24 € ou 35 €).</li>
+            <li><strong>Pas de reconduction tacite :</strong> Aucun renouvellement n'est prélevé sans votre accord explicite.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Refund and Conditions Information Section -->
+  <section class="pricing-refund-conditions-section section" aria-labelledby="conditions-title">
+    <div class="container">
+      <div class="info-card warning-accent">
+        <h2 id="conditions-title" class="section-title">Conditions de service et remboursement</h2>
+        <div class="info-content">
+          <p>
+            Nous attachons une grande importance à la satisfaction et à la conformité de notre service. Avant tout engagement, les conditions applicables doivent être consultées :
+          </p>
+          <ul class="info-list">
+            <li><strong>Vérification réseau :</strong> Assurez-vous de disposer d'une connexion internet stable (minimum 10 à 15 Mbps).</li>
+            <li><strong>Politique de remboursement :</strong> Renseignez-vous auprès du support sur les modalités applicables en cas d'incompatibilité matérielle avérée avant l'activation.</li>
+            <li><strong>Responsabilité d'usage :</strong> L'accès est personnel et destiné à un usage privé conforme aux règles en vigueur en France.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. FAQ Section -->
+  <section class="pricing-faq-section section" aria-labelledby="pricing-faq-title">
+    <div class="container">
+      <div class="text-center">
+        <h2 id="pricing-faq-title" class="section-title">Questions fréquentes sur les tarifs</h2>
+        <p class="section-subtitle">
+          Retrouvez les précisions essentielles avant de souscrire.
+        </p>
+      </div>
+
+      <div class="faq-list">
+        {PRICING_FAQ_ITEMS.map((item, index) => (
+          <details class="faq-item" id={`pricing-faq-${index + 1}`}>
+            <summary class="faq-question">
+              <span>{item.question}</span>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{item.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Final CTA Section -->
+  <section class="pricing-final-cta-section section" aria-labelledby="pricing-final-cta-title">
+    <div class="container text-center">
+      <div class="final-cta-box">
+        <h2 id="pricing-final-cta-title" class="section-title">Une question avant de commander ?</h2>
+        <p class="section-subtitle">
+          Notre équipe est à votre écoute sur WhatsApp pour vous conseiller sur la formule adaptée à votre équipement.
+        </p>
+        <div class="final-cta-buttons">
+          <WhatsAppCTA
+            intent="general_information"
+            label="Discuter avec un conseiller sur WhatsApp"
+            sourceSection="pricing"
+            variant="primary"
+          />
+          <a href="/appareils-compatibles/" class="btn btn-secondary">Vérifier mon appareil d'abord</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .text-center {
+    text-align: center;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .intro-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-sm) var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+  }
+
+  .intro-badge {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    color: var(--color-accent);
+    font-weight: 500;
+  }
+
+  .pricing-transparency-note {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin-top: var(--spacing-lg);
+  }
+
+  /* Comparison Guide Grid */
+  .comparison-guide-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+  }
+
+  .guide-item {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .guide-item-featured {
+    border-color: var(--color-accent);
+    background: linear-gradient(180deg, var(--color-surface) 0%, rgba(56, 189, 248, 0.05) 100%);
+  }
+
+  .guide-item-header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+
+  .guide-item-header h3 {
+    font-size: 1.25rem;
+    color: var(--color-text);
+  }
+
+  .guide-tag {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .guide-tag.highlight {
+    color: var(--color-accent);
+  }
+
+  .guide-item p {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  /* Features Box */
+  .features-box {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+  }
+
+  .features-checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .feature-item {
+    padding: var(--spacing-md);
+    background-color: var(--color-surface-hover);
+    border-radius: var(--radius-md);
+  }
+
+  .feature-name {
+    font-size: 1.1rem;
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .feature-desc {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  .features-disclaimer {
+    border-top: 1px solid var(--color-border-subtle);
+    padding-top: var(--spacing-lg);
+    font-size: 0.9rem;
+    color: var(--color-text-subtle);
+    line-height: 1.5;
+  }
+
+  /* Info Cards (Payment & Conditions) */
+  .info-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+  }
+
+  .info-card.warning-accent {
+    border-left: 4px solid var(--color-accent);
+  }
+
+  .info-content {
+    margin-top: var(--spacing-md);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+
+  .info-list {
+    margin-top: var(--spacing-md);
+    padding-left: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .info-list li {
+    color: var(--color-text);
+  }
+
+  /* FAQ List */
+  .faq-list {
+    max-width: 800px;
+    margin: var(--spacing-xl) auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .faq-item {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+  }
+
+  .faq-question {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-icon {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--color-accent);
+    transition: transform 0.2s ease;
+  }
+
+  .faq-item[open] .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  .faq-answer {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-top: 1px solid var(--color-border-subtle);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  /* Final CTA */
+  .final-cta-box {
+    background: linear-gradient(180deg, var(--color-surface) 0%, rgba(37, 99, 235, 0.1) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+  }
+
+  .final-cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-md);
+    margin-top: var(--spacing-xl);
+  }
+</style>

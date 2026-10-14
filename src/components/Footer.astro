@@ -1,0 +1,52 @@
+---
+import { MAIN_NAV_ITEMS } from '../data/navigation';
+import { getApprovedLegalRoutes, CURRENT_WORKSPACE_LEGAL_CONFIG } from '../utils/legal-guardrails';
+
+const currentYear = new Date().getFullYear();
+const approvedLegalRoutes = getApprovedLegalRoutes(CURRENT_WORKSPACE_LEGAL_CONFIG);
+---
+
+<footer class="site-footer">
+  <div class="container footer-content">
+    <div class="footer-brand">
+      <h2>NexaTV</h2>
+      <p>
+        Plateforme d'accès et d'assistance aux offres télévisuelles pour la France métropolitaine.
+      </p>
+    </div>
+
+    <nav class="footer-nav" aria-label="Navigation pied de page">
+      <ul>
+        {
+          MAIN_NAV_ITEMS.map((item) => (
+            <li>
+              <a href={item.href} class="nav-link">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    {
+      approvedLegalRoutes.length > 0 && (
+        <nav class="footer-legal-nav" aria-label="Informations légales et contractuelles">
+          <ul>
+            {approvedLegalRoutes.map((legalItem) => (
+              <li>
+                <a href={legalItem.route} class="legal-link">
+                  {legalItem.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+
+    <div class="footer-bottom">
+      <p>&copy; {currentYear} NexaTV. Tous droits réservés.</p>
+    </div>
+  </div>
+</footer>

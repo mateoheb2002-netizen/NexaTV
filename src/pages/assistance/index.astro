@@ -1,0 +1,623 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import WhatsAppCTA from '../../components/WhatsAppCTA.astro';
+
+const pageTitle = "Assistance et support technique NexaTV : aide, dépannage et contact";
+const pageDescription = "Accédez aux ressources d'aide NexaTV : résolution des problèmes de buffering, guide de mise en route, gestion de votre abonnement et contact avec notre assistance francophone sur WhatsApp.";
+
+const ASSISTANCE_FAQS = [
+  {
+    question: "Que faire en cas de coupures ou de mise en mémoire tampon (buffering) ?",
+    answer:
+      "La grande majorité des problèmes de buffering provient d'une instabilité du réseau local ou d'une saturation de la mémoire de l'écran. Commencez par redémarrer votre routeur internet et votre téléviseur. Privilégiez une liaison filaire Ethernet RJ45 à la place du Wi-Fi, puis augmentez la taille du tampon (buffer) dans les réglages de votre lecteur multimédia.",
+  },
+  {
+    question: "Comment installer mon accès sur un nouvel équipement ?",
+    answer:
+      "Téléchargez l'application recommandée pour votre appareil depuis la boutique officielle de votre système d'exploitation. Renseignez ensuite vos paramètres de connexion transmis par notre conseiller. Pour connaître les spécificités de votre modèle, consultez notre page dédiée aux appareils compatibles.",
+  },
+  {
+    question: "Mon abonnement arrive à échéance, comment le renouveler ?",
+    answer:
+      "Chez NexaTV, aucun abonnement n'est renouvelé automatiquement. Pour continuer à profiter de votre accès sans interruption, contactez simplement notre équipe commerciale sur WhatsApp 24 à 48 heures avant la fin de votre période pour choisir une nouvelle formule de 3, 6 ou 12 mois.",
+  },
+  {
+    question: "Puis-je utiliser mes paramètres sur plusieurs écrans en simultané ?",
+    answer:
+      "Chaque formule d'accès est configurée pour un usage individuel sur votre équipement principal. L'utilisation simultanée sur plusieurs téléviseurs peut provoquer des déconnexions automatiques. Renseignez-vous auprès de notre conseiller pour valider les conditions adaptées à votre foyer.",
+  },
+  {
+    question: "Quelles informations fournir pour un dépannage rapide ?",
+    answer:
+      "Indiquez simplement le modèle exact de votre téléviseur ou boîtier, l'application utilisée, votre mode de connexion (Wi-Fi ou câble) et le message d'erreur affiché. Aucune donnée bancaire ni aucun mot de passe ne doivent être partagés.",
+  },
+];
+
+import { generateFAQPageSchema, generateBreadcrumbListSchema } from '../../utils/jsonld';
+import { getSiteCanonicalHost } from '../../utils/seo';
+
+const siteUrl = getSiteCanonicalHost();
+const jsonLd = [
+  generateBreadcrumbListSchema([
+    { label: 'Accueil', href: '/' },
+    { label: 'Assistance' },
+  ], siteUrl),
+  generateFAQPageSchema(ASSISTANCE_FAQS),
+];
+---
+
+<BaseLayout title={pageTitle} description={pageDescription} jsonLd={jsonLd}>
+  <!-- 1. Assistance Introduction Section -->
+  <section class="assistance-intro-section section">
+    <div class="container text-center">
+      <h1 class="section-title">Assistance et support technique NexaTV</h1>
+      <p class="section-subtitle">
+        Retrouvez nos conseils de configuration, les étapes de résolution autonome et l'accès à notre équipe d'assistance francophone sur WhatsApp.
+      </p>
+
+      <div class="quick-nav-grid">
+        <a href="#installation" class="quick-nav-card">
+          <div class="quick-nav-icon" aria-hidden="true">🛠️</div>
+          <h2 class="quick-nav-title">Installation & Configuration</h2>
+          <p class="quick-nav-desc">Mise en route pas à pas sur votre équipement</p>
+        </a>
+        <a href="#depannage" class="quick-nav-card">
+          <div class="quick-nav-icon" aria-hidden="true">⚡</div>
+          <h2 class="quick-nav-title">Dépannage & Buffering</h2>
+          <p class="quick-nav-desc">Résoudre les coupures et ralentissements</p>
+        </a>
+        <a href="#abonnement" class="quick-nav-card">
+          <div class="quick-nav-icon" aria-hidden="true">📋</div>
+          <h2 class="quick-nav-title">Abonnement & Renouvellement</h2>
+          <p class="quick-nav-desc">Modalités de reconduction sans reconduction tacite</p>
+        </a>
+        <a href="#contact" class="quick-nav-card">
+          <div class="quick-nav-icon" aria-hidden="true">💬</div>
+          <h2 class="quick-nav-title">Contact Support</h2>
+          <p class="quick-nav-desc">Échanger avec un conseiller technique</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. Installation Guidance Section -->
+  <section class="assistance-installation-section section" id="installation" aria-labelledby="install-title">
+    <div class="container">
+      <div class="section-box">
+        <h2 id="install-title" class="section-title text-center">Guide d'installation et de configuration</h2>
+        <p class="section-subtitle text-center">
+          Trois étapes indispensables pour mettre en service votre équipement en toute sérénité.
+        </p>
+
+        <div class="steps-container">
+          <div class="step-row">
+            <div class="step-badge">Étape 1</div>
+            <div class="step-content">
+              <h3 class="step-heading">Installer un lecteur multimédia certifié</h3>
+              <p>
+                Rendez-vous sur la boutique officielle de votre système d'exploitation (Samsung Smart Hub, LG Content Store, Google Play Store ou Amazon Appstore) et téléchargez une application de lecture multimédia reconnue.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row">
+            <div class="step-badge">Étape 2</div>
+            <div class="step-content">
+              <h3 class="step-heading">Renseigner vos paramètres d'accès</h3>
+              <p>
+                Saisissez scrupuleusement les éléments de configuration fournis lors de votre activation sur WhatsApp, en prêtant une attention particulière aux majuscules, minuscules et caractères spéciaux.
+              </p>
+            </div>
+          </div>
+
+          <div class="step-row">
+            <div class="step-badge">Étape 3</div>
+            <div class="step-content">
+              <h3 class="step-heading">Vérifier votre équipement et son système</h3>
+              <p>
+                Chaque téléviseur dispose de caractéristiques matérielles uniques. En cas de doute sur la compatibilité de votre référence, consultez notre hub d'information :
+              </p>
+              <div class="step-action">
+                <a href="/appareils-compatibles/" class="btn btn-secondary">
+                  Consulter la compatibilité des appareils &rarr;
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Playback Troubleshooting Section -->
+  <section class="assistance-troubleshooting-section section" id="depannage" aria-labelledby="troubleshoot-title">
+    <div class="container">
+      <div class="section-box">
+        <h2 id="troubleshoot-title" class="section-title text-center">Résolution des problèmes de lecture et de buffering</h2>
+        <p class="section-subtitle text-center">
+          Des vérifications techniques concrètes et immédiates, sans dépendre de l'assistance.
+        </p>
+
+        <div class="troubleshoot-grid">
+          <div class="troubleshoot-card">
+            <div class="card-num">1</div>
+            <h3 class="card-title">Redémarrage matériel complet</h3>
+            <p class="card-text">
+              Éteignez électriquement votre box internet (routeur) et votre téléviseur pendant 30 secondes avant de les rebrancher. Cette manipulation purge les tables DNS et les caches mémoire accumulés.
+            </p>
+          </div>
+
+          <div class="troubleshoot-card">
+            <div class="card-num">2</div>
+            <h3 class="card-title">Connexion par câble Ethernet</h3>
+            <p class="card-text">
+              Le Wi-Fi domestique est sujet aux interférences (murs épais, micro-ondes, appareils Bluetooth). L'utilisation d'un câble Ethernet RJ45 direct garantit une gigue minimale et supprime les pertes de paquets.
+            </p>
+          </div>
+
+          <div class="troubleshoot-card">
+            <div class="card-num">3</div>
+            <h3 class="card-title">Ajustement du tampon (buffer)</h3>
+            <p class="card-text">
+              Dans les options avancées de votre lecteur multimédia, réglez la taille du tampon vidéo sur une valeur comprise entre 2 et 5 secondes afin d'absorber les micro-variations de débit internet.
+            </p>
+          </div>
+
+          <div class="troubleshoot-card">
+            <div class="card-num">4</div>
+            <h3 class="card-title">Basculer le moteur de décodage</h3>
+            <p class="card-text">
+              Certains processeurs de Smart TV peinent avec le décodage matériel (HW). Si l'image saccade, basculez le décodeur vidéo sur le mode logiciel (SW) ou VLC dans les réglages de votre application.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Subscription Information Section -->
+  <section class="assistance-subscription-section section" id="abonnement" aria-labelledby="subscription-title">
+    <div class="container">
+      <div class="section-box">
+        <h2 id="subscription-title" class="section-title">Gestion de l'abonnement et renouvellement</h2>
+        <div class="subscription-content">
+          <p>
+            NexaTV privilégie un modèle commercial respectueux de l'utilisateur, exempt de toute reconduction automatique ou de prélèvement bancaire non sollicité.
+          </p>
+
+          <div class="subscription-columns">
+            <div class="sub-col">
+              <h3 class="sub-heading">Fin de période et expiration</h3>
+              <p>
+                À la date d'échéance de votre formule (3, 6 ou 12 mois), votre accès s'interrompt naturellement sans aucune démarche de résiliation de votre part.
+              </p>
+            </div>
+
+            <div class="sub-col">
+              <h3 class="sub-heading">Reconduire votre accès</h3>
+              <p>
+                Si vous souhaitez prolonger votre formule, contactez simplement notre service commercial quelques jours avant le terme pour mettre à jour vos droits.
+              </p>
+            </div>
+          </div>
+
+          <div class="subscription-action text-center">
+            <p class="action-note">Vous souhaitez comparer ou changer de formule ?</p>
+            <a href="/abonnement-iptv/" class="btn btn-secondary">
+              Voir le comparatif des formules (dès 12 €)
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Contact Support Section -->
+  <section class="assistance-contact-section section" id="contact" aria-labelledby="contact-title">
+    <div class="container">
+      <div class="contact-box">
+        <h2 id="contact-title" class="section-title text-center">Contacter l'assistance technique</h2>
+        <p class="section-subtitle text-center">
+          Notre équipe vous accompagne en direct sur WhatsApp pour résoudre les dysfonctionnements persistants.
+        </p>
+
+        <div class="diagnostic-info-box">
+          <h3 class="diagnostic-title">Informations recommandées à préparer (facultatif) :</h3>
+          <p class="diagnostic-intro">
+            Afin d'accélérer l'analyse de votre situation, vous pouvez préciser lors de votre message :
+          </p>
+          <ul class="diagnostic-list">
+            <li><strong>Modèle exact :</strong> La marque et référence de votre téléviseur ou boîtier (ex. Samsung Tizen 2021).</li>
+            <li><strong>Application utilisée :</strong> Le nom du lecteur multimédia installé sur votre appareil.</li>
+            <li><strong>Description du problème :</strong> Le comportement précis constaté (code d'erreur, écran noir, coupure après X minutes).</li>
+            <li><strong>Type de liaison :</strong> Connexion par câble Ethernet ou réseau sans fil Wi-Fi.</li>
+          </ul>
+
+          <div class="security-reminder">
+            <strong>Rappel de sécurité :</strong> Ne transmettez jamais de mot de passe, de données de carte bancaire ni de code secret. Notre équipe ne vous demandera jamais d'informations financières lors d'un dépannage.
+          </div>
+        </div>
+
+        <div class="support-cta-container text-center">
+          <WhatsAppCTA
+            intent="technical_support"
+            label="Ouvrir une demande d'assistance sur WhatsApp"
+            sourceSection="support"
+            variant="primary"
+            className="btn-large"
+          />
+          <p class="support-availability-note">
+            Les demandes sont traitées manuellement par nos conseillers francophones par ordre d'arrivée.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. FAQ Section -->
+  <section class="assistance-faq-section section" id="faq" aria-labelledby="assistance-faq-title">
+    <div class="container">
+      <div class="text-center">
+        <h2 id="assistance-faq-title" class="section-title">Questions fréquentes sur l'assistance</h2>
+        <p class="section-subtitle">
+          Retrouvez les réponses aux interrogations techniques les plus courantes.
+        </p>
+      </div>
+
+      <div class="faq-list">
+        {ASSISTANCE_FAQS.map((item, index) => (
+          <details class="faq-item" id={`assistance-faq-${index + 1}`}>
+            <summary class="faq-question">
+              <span>{item.question}</span>
+              <span class="faq-icon" aria-hidden="true">+</span>
+            </summary>
+            <div class="faq-answer">
+              <p>{item.answer}</p>
+            </div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .text-center {
+    text-align: center;
+  }
+
+  /* Quick Navigation Grid */
+  .quick-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-2xl);
+  }
+
+  .quick-nav-card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    text-align: center;
+    text-decoration: none;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+  }
+
+  .quick-nav-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-accent);
+  }
+
+  .quick-nav-icon {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .quick-nav-title {
+    font-size: 1.15rem;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .quick-nav-desc {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  /* Section Box */
+  .section-box {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+  }
+
+  /* Steps Container */
+  .steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+  }
+
+  .step-row {
+    display: flex;
+    gap: var(--spacing-xl);
+    align-items: flex-start;
+    padding-bottom: var(--spacing-xl);
+    border-bottom: 1px solid var(--color-border-subtle);
+  }
+
+  .step-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .step-badge {
+    background-color: var(--color-accent);
+    color: #0b0f19;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .step-content {
+    flex-grow: 1;
+  }
+
+  .step-heading {
+    font-size: 1.2rem;
+    color: var(--color-text);
+    margin-top: 0;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .step-content p {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .step-action {
+    margin-top: var(--spacing-md);
+  }
+
+  /* Troubleshoot Grid */
+  .troubleshoot-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-2xl);
+  }
+
+  .troubleshoot-card {
+    background-color: var(--color-surface-hover);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+
+  .card-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    color: #0b0f19;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+    color: var(--color-text);
+    margin: 0;
+  }
+
+  .card-text {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* Subscription Content */
+  .subscription-content {
+    margin-top: var(--spacing-md);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    font-size: 1rem;
+  }
+
+  .subscription-columns {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-xl);
+    margin-bottom: var(--spacing-xl);
+  }
+
+  .sub-col {
+    background-color: var(--color-surface-hover);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-md);
+  }
+
+  .sub-heading {
+    font-size: 1.1rem;
+    color: var(--color-text);
+    margin-top: 0;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .sub-col p {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .subscription-action {
+    border-top: 1px solid var(--color-border-subtle);
+    padding-top: var(--spacing-xl);
+  }
+
+  .action-note {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+  }
+
+  /* Contact Box */
+  .contact-box {
+    background: linear-gradient(180deg, var(--color-surface) 0%, rgba(37, 99, 235, 0.08) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xl);
+  }
+
+  .diagnostic-info-box {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-xl);
+    max-width: 800px;
+    margin: var(--spacing-xl) auto;
+  }
+
+  .diagnostic-title {
+    font-size: 1.1rem;
+    color: var(--color-text);
+    margin-top: 0;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .diagnostic-intro {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .diagnostic-list {
+    padding-left: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .diagnostic-list li {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  .diagnostic-list strong {
+    color: var(--color-text);
+  }
+
+  .security-reminder {
+    background-color: rgba(245, 158, 11, 0.1);
+    border-left: 3px solid #f59e0b;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  .security-reminder strong {
+    color: #f59e0b;
+  }
+
+  .support-cta-container {
+    margin-top: var(--spacing-xl);
+  }
+
+  .support-availability-note {
+    font-size: 0.85rem;
+    color: var(--color-text-subtle);
+    margin-top: var(--spacing-md);
+  }
+
+  /* FAQ List */
+  .faq-list {
+    max-width: 800px;
+    margin: var(--spacing-xl) auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+
+  .faq-item {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color 0.15s ease;
+  }
+
+  .faq-item[open] {
+    border-color: var(--color-accent);
+  }
+
+  .faq-question {
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    user-select: none;
+  }
+
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-icon {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--color-accent);
+    transition: transform 0.2s ease;
+  }
+
+  .faq-item[open] .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  .faq-answer {
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-top: 1px solid var(--color-border-subtle);
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 640px) {
+    .step-row {
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+  }
+</style>
