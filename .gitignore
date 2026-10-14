@@ -6,7 +6,6 @@ coverage/
 
 # Environment variables
 .env
-.env.production
 .env.local
 
 # Operating System files

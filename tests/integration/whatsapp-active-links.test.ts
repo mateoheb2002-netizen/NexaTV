@@ -95,4 +95,12 @@ describe('Active WhatsApp CTAs Integration Test (Target: +330601384612 -> 336013
       expect(content).toContain(`href="https://wa.me/${TARGET_PHONE}`);
     }
   });
+
+  it('Test 8: astro.config.mjs ensures fallback to approved production WhatsApp phone number', async () => {
+    const configPath = path.join(projectRoot, 'astro.config.mjs');
+    const content = fs.readFileSync(configPath, 'utf-8');
+    expect(content).toContain(TARGET_PHONE);
+    expect(content).toContain('PUBLIC_WHATSAPP_PHONE');
+  });
 });
+
