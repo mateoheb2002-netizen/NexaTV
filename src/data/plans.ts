@@ -30,19 +30,19 @@ export const RAW_PLAN_CONFIGS: readonly PlanRawConfig[] = [
     id: '3m',
     displayName: 'Découverte',
     durationMonths: 3,
-    amountEUR: 12,
+    amountEUR: 20,
   },
   {
     id: '6m',
     displayName: 'Standard',
     durationMonths: 6,
-    amountEUR: 24,
+    amountEUR: 30,
   },
   {
     id: '12m',
     displayName: 'Annuel',
     durationMonths: 12,
-    amountEUR: 35,
+    amountEUR: 45,
     highlightReason: 'Meilleur tarif mensuel NexaTV',
   },
 ] as const;
@@ -152,7 +152,7 @@ export function getRequiredPlanById(id: PlanId | string): Plan {
 
 /**
  * Calculates savings for the annual plan versus 4 consecutive 3-month purchases.
- * 4 * (3m price) - (12m price) = 4 * 12 - 35 = 13 EUR.
+ * 4 * (3m price) - (12m price) = 4 * 20 - 45 = 35 EUR.
  */
 export function calculateAnnualSavingsVsShortTerm(catalogue: readonly Plan[] = PLANS): number {
   const plan3m = catalogue.find((p) => p.id === '3m');
